@@ -4,9 +4,7 @@ import numpy as np
 import pandas as pd   
 import ssl
 ssl._create_default_https_context = ssl._create_unverified_context
-import ipywidgets as widgets
-from scipy.stats import gmean
-from math import ceil
+from scipy import stats
 
 #importing data
 erp_data = pd.read_html("https://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/ctryprem.html")[0]
@@ -43,7 +41,7 @@ st.markdown("---")
 st.sidebar.subheader('Query parameters')
 country = st.sidebar.selectbox("Select a Country:", options = countries_second)
 industry = st.sidebar.selectbox("Select an Industry:", options = industries[1:])
-start_date = st.sidebar.selectbox("Starting date for the Risk Premium calculation:", options = years[1:])
+start_date = st.sidebar.selectbox("Starting date for the Risk Premium calculation:", options = years[2:])
 maturity = st.sidebar.selectbox("T-bond maturity:", options =[10,20,30])
 
 #mature market equity risk premium
@@ -149,7 +147,7 @@ def spread(data, country):
   except:
     pass
   try:
-    spread = gmean(spread_data.loc[country]/100+1)-gmean(spread_data.loc["United States"]/100+1)
+    spread = stats.gmean(spread_data.loc[country]/100+1)-stats.gmean(spread_data.loc["United States"]/100+1)
   except:
     spread = 0
   return spread
