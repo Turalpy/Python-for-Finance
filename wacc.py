@@ -4,7 +4,12 @@ import numpy as np
 import pandas as pd   
 import ssl
 ssl._create_default_https_context = ssl._create_unverified_context
-from scipy import stats
+
+
+#geomean function
+def gmean(x):
+    a = np.log(x)
+    return np.exp(a.mean())
 
 #importing data
 erp_data = pd.read_html("https://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/ctryprem.html")[0]
@@ -147,7 +152,7 @@ def spread(data, country):
   except:
     pass
   try:
-    spread = stats.gmean(spread_data.loc[country]/100+1)-stats.gmean(spread_data.loc["United States"]/100+1)
+    spread = gmean(spread_data.loc[country]/100+1)-gmean(spread_data.loc["United States"]/100+1)
   except:
     spread = 0
   return spread
@@ -193,15 +198,3 @@ if spread == 0:
 else:
     st.text("->   Currency Spread:"+ " "*(45-len("->   Currency Spread:"))+ spread_print)
     st.text("->   WACC, in local currency:"+ " "*(45-len("->   WACC, in local currency:"))+ wacc_local_print)
-
-
-
-
-
-
-
-
-
-
-
-
